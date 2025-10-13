@@ -1,10 +1,10 @@
-using ParcBack.Application.Abstractions;
+using MediatR;
 using ParcBack.Application.Zones;
 using ParcBack.Domain.Repositories;
 
 namespace ParcBack.Application.Zones.ListZones;
 
-public class ListZonesHandler : IQueryHandler<ListZonesQuery, IReadOnlyList<ZoneDto>>
+public class ListZonesHandler : IRequestHandler<ListZonesQuery, IReadOnlyList<ZoneDto>>
 {
     private readonly IZoneRepository _repo;
 

@@ -1,10 +1,10 @@
-using ParcBack.Application.Abstractions;
+using MediatR;
 using ParcBack.Application.Zones;
 using ParcBack.Domain.Repositories;
 
 namespace ParcBack.Application.Zones.GetZoneByTheme;
 
-public class GetZoneByThemeHandler : IQueryHandler<GetZoneByThemeQuery, ZoneDto?>
+public class GetZoneByThemeHandler : IRequestHandler<GetZoneByThemeQuery, ZoneDto?>
 {
     private readonly IZoneRepository _repo;
 

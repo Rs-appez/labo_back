@@ -1,11 +1,12 @@
-using ParcBack.Application.Abstractions;
 using ParcBack.Domain.Abstractions;
 using ParcBack.Domain.Entities;
 using ParcBack.Domain.Repositories;
+using MediatR;
+
 
 namespace ParcBack.Application.Zones.CreateZone;
 
-public class CreateZoneHandler : ICommandHandler<CreateZoneCommand, int>
+public class CreateZoneHandler : IRequestHandler<CreateZoneCommand, int>
 {
     private readonly IZoneRepository _repo;
     private readonly IUnitOfWork _uow;

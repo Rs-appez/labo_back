@@ -1,10 +1,10 @@
-using ParcBack.Application.Abstractions;
 using ParcBack.Application.Zones;
 using ParcBack.Application.Zones.CreateZone;
 using ParcBack.Application.Zones.GetZoneById;
 using ParcBack.Application.Zones.ListZones;
 using ParcBack.Application.Zones.DeleteZone;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace ParcBack.Api.Controllers;
 
@@ -12,22 +12,10 @@ namespace ParcBack.Api.Controllers;
 [Route("api/[controller]")]
 public class ZonesController : ControllerBase
 {
-    private readonly ICommandHandler<CreateZoneCommand, int> _create;
-    private readonly IQueryHandler<GetZoneByIdQuery, ZoneDto?> _getById;
-    private readonly IQueryHandler<ListZonesQuery, IReadOnlyList<ZoneDto>> _list;
-    private readonly ICommandHandler<DeleteZoneCommand, int> _remove;
+    private readonly IMediator _mediator;
 
-    public ZonesController(
-        ICommandHandler<CreateZoneCommand, int> create,
-        ICommandHandler<DeleteZoneCommand, int> remove,
-        IQueryHandler<GetZoneByIdQuery, ZoneDto?> getById,
-        IQueryHandler<ListZonesQuery, IReadOnlyList<ZoneDto>> list)
-    {
-        _create = create;
-        _remove = remove;
-        _getById = getById;
-        _list = list;
-    }
+    public ZonesController(IMediator mediator) { _mediator = mediator; }
+
 
     public record CreateZoneRequest(string Theme);
 
@@ -37,7 +25,7 @@ public class ZonesController : ControllerBase
         int id;
         try
         {
-            id = await _create.Handle(new CreateZoneCommand(body.Theme), ct);
+            id = await _mediator.Send(new CreateZoneCommand(body.Theme), ct);
         }
         catch (Exception ex)
         {
@@ -49,14 +37,14 @@ public class ZonesController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ZoneDto>> GetById(int id, CancellationToken ct)
     {
-        var dto = await _getById.Handle(new GetZoneByIdQuery(id), ct);
+        var dto = await _mediator.Send(new GetZoneByIdQuery(id), ct);
         return dto is null ? NotFound() : Ok(dto);
     }
 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<ZoneDto>>> List(CancellationToken ct)
     {
-        var dtos = await _list.Handle(new ListZonesQuery(), ct);
+        var dtos = await _mediator.Send(new ListZonesQuery(), ct);
         return Ok(dtos);
     }
 
@@ -65,7 +53,7 @@ public class ZonesController : ControllerBase
     {
         try
         {
-            var deletedId = await _remove.Handle(new DeleteZoneCommand(id), ct);
+            var deletedId = await _mediator.Send(new DeleteZoneCommand(id), ct);
             return Ok(deletedId);
         }
         catch (InvalidOperationException ex)

@@ -1,4 +1,3 @@
-using ParcBack.Application.Abstractions;
 using ParcBack.Application.Zones;
 using ParcBack.Application.Zones.CreateZone;
 using ParcBack.Application.Zones.GetZoneById;
@@ -9,6 +8,7 @@ using ParcBack.Domain.Abstractions;
 using ParcBack.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ParcBack.Application.Zones.DeleteZone;
+using MediatR;
 
 
 internal class Program
@@ -30,11 +30,15 @@ internal class Program
         builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
         builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
 
-        // Handlers (CQS without MediatR)
-        builder.Services.AddScoped<ICommandHandler<CreateZoneCommand, int>, CreateZoneHandler>();
-        builder.Services.AddScoped<IQueryHandler<GetZoneByIdQuery, ZoneDto?>, GetZoneByIdHandler>();
-        builder.Services.AddScoped<IQueryHandler<ListZonesQuery, IReadOnlyList<ZoneDto>>, ListZonesHandler>();
-        builder.Services.AddScoped<ICommandHandler<DeleteZoneCommand, int>, DeleteZoneHandler>();
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(
+                typeof(CreateZoneHandler).Assembly,
+                typeof(GetZoneByIdHandler).Assembly,
+                typeof(ListZonesHandler).Assembly,
+                typeof(DeleteZoneHandler).Assembly
+                    );
+        });
 
 
         var app = builder.Build();

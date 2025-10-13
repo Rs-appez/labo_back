@@ -1,11 +1,11 @@
-using ParcBack.Application.Abstractions;
 using ParcBack.Domain.Abstractions;
 using ParcBack.Domain.Entities;
 using ParcBack.Domain.Repositories;
+using MediatR;
 
 namespace ParcBack.Application.Zones.DeleteZone;
 
-public class DeleteZoneHandler : ICommandHandler<DeleteZoneCommand, int>
+public class DeleteZoneHandler : IRequestHandler<DeleteZoneCommand, int>
 {
     private readonly IZoneRepository _repo;
     private readonly IUnitOfWork _uow;

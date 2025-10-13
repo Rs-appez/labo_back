@@ -1,10 +1,10 @@
-using ParcBack.Application.Abstractions;
 using ParcBack.Application.Zones;
 using ParcBack.Domain.Repositories;
+using MediatR;
 
 namespace ParcBack.Application.Zones.GetZoneById;
 
-public class GetZoneByIdHandler : IQueryHandler<GetZoneByIdQuery, ZoneDto?>
+public class GetZoneByIdHandler : IRequestHandler<GetZoneByIdQuery, ZoneDto?>
 {
     private readonly IZoneRepository _repo;
 
