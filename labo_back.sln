@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParcAPI", "ParcAPI.Presentation\ParcAPI.csproj", "{36CAFC43-9CDF-45A7-9B09-D68DF9449709}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParcAPI.Application", "ParcAPI.Application\ParcAPI.Application.csproj", "{793EA48C-9FE5-433F-88C7-201C1A96FB2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParcAPI.Infrastructure", "ParcAPI.Infrastructure\ParcAPI.Infrastructure.csproj", "{C0F0EDFA-B49C-452A-AE50-AF6C192550DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParcAPI.Domain", "ParcAPI.Domain\ParcAPI.Domain.csproj", "{E93A018D-1A92-44CF-A4F0-B0CC18D386E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36CAFC43-9CDF-45A7-9B09-D68DF9449709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36CAFC43-9CDF-45A7-9B09-D68DF9449709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36CAFC43-9CDF-45A7-9B09-D68DF9449709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36CAFC43-9CDF-45A7-9B09-D68DF9449709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793EA48C-9FE5-433F-88C7-201C1A96FB2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793EA48C-9FE5-433F-88C7-201C1A96FB2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793EA48C-9FE5-433F-88C7-201C1A96FB2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793EA48C-9FE5-433F-88C7-201C1A96FB2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F0EDFA-B49C-452A-AE50-AF6C192550DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F0EDFA-B49C-452A-AE50-AF6C192550DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F0EDFA-B49C-452A-AE50-AF6C192550DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F0EDFA-B49C-452A-AE50-AF6C192550DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93A018D-1A92-44CF-A4F0-B0CC18D386E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93A018D-1A92-44CF-A4F0-B0CC18D386E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93A018D-1A92-44CF-A4F0-B0CC18D386E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93A018D-1A92-44CF-A4F0-B0CC18D386E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
