@@ -1,0 +1,32 @@
+using ParcBack.Application.Abstractions;
+using ParcBack.Domain.Abstractions;
+using ParcBack.Domain.Entities;
+using ParcBack.Domain.Repositories;
+
+namespace ParcBack.Application.Zones.CreateZone;
+
+public class CreateZoneHandler : ICommandHandler<CreateZoneCommand, int>
+{
+    private readonly IZoneRepository _repo;
+    private readonly IUnitOfWork _uow;
+
+    public CreateZoneHandler(IZoneRepository repo, IUnitOfWork uow)
+    {
+        _repo = repo;
+        _uow = uow;
+    }
+
+    public async Task<int> Handle(CreateZoneCommand command, CancellationToken ct)
+    {
+        if (await _repo.GetByNameAsync(command.Name, ct) is not null)
+        {
+            throw new InvalidOperationException($"Zone with name {command.Name} already exists");
+        }
+        var item = new Zone(command.Name);
+        await _repo.AddAsync(item, ct);
+        await _uow.SaveChangesAsync(ct);
+
+        return item.Id;
+    }
+
+}
