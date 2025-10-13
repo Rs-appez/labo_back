@@ -52,4 +52,4 @@ Cette gestion de tâches devrait apparaitre sous forme d'agenda aﬁn de
 faciliter le travail des chefs de service
 
 L'application devra permettre
-la communication en mettant des commentaires aux di érentes tâches.
+la communication en mettant des commentaires aux différentes tâches.
