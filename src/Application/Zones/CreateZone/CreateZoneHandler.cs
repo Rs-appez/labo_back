@@ -18,11 +18,13 @@ public class CreateZoneHandler : ICommandHandler<CreateZoneCommand, int>
 
     public async Task<int> Handle(CreateZoneCommand command, CancellationToken ct)
     {
-        if (await _repo.GetByNameAsync(command.Name, ct) is not null)
+        if (await _repo.GetByThemeAsync(command.Theme, ct) is not null)
         {
-            throw new InvalidOperationException($"Zone with name {command.Name} already exists");
+            throw new InvalidOperationException($"Zone with name {command.Theme} already exists");
         }
-        var item = new Zone(command.Name);
+        var item = new Zone(){
+            Theme = command.Theme,
+        };
         await _repo.AddAsync(item, ct);
         await _uow.SaveChangesAsync(ct);
 

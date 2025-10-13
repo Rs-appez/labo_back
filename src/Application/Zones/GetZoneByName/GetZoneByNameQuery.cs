@@ -1,3 +1,3 @@
-namespace ParcBack.Application.Zones.GetZoneById;
+namespace ParcBack.Application.Zones.GetZoneByTheme;
 
-public record GetZoneByNameQuery(string Name);
+public record GetZoneByThemeQuery(string Name);

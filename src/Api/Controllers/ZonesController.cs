@@ -29,7 +29,7 @@ public class ZonesController : ControllerBase
         _list = list;
     }
 
-    public record CreateZoneRequest(string Name);
+    public record CreateZoneRequest(string Theme);
 
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateZoneRequest body, CancellationToken ct)
@@ -37,7 +37,7 @@ public class ZonesController : ControllerBase
         int id;
         try
         {
-            id = await _create.Handle(new CreateZoneCommand(body.Name), ct);
+            id = await _create.Handle(new CreateZoneCommand(body.Theme), ct);
         }
         catch (Exception ex)
         {
@@ -65,7 +65,6 @@ public class ZonesController : ControllerBase
     {
         try
         {
-
             var deletedId = await _remove.Handle(new DeleteZoneCommand(id), ct);
             return Ok(deletedId);
         }

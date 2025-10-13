@@ -8,12 +8,12 @@ public class Zone
     [Required]
     [MaxLength(100)]
     [MinLength(3)]
-    public string Name { get; private set; }
+    public required string Theme { get; set; }
 
     public Zone() { } // Parameterless constructor for EF Core
 
-    public Zone(string name)
+    public Zone(string theme)
     {
-        Name = name;
+        Theme = theme;
     }
 }

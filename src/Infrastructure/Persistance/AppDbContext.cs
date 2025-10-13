@@ -15,8 +15,8 @@ public class AppDbContext : DbContext
         {
             b.ToTable("Zones");
             b.HasKey(x => x.Id);
-            b.HasIndex(x => x.Name).IsUnique(); 
-            b.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            b.HasIndex(x => x.Theme).IsUnique(); 
+            b.Property(x => x.Theme).IsRequired().HasMaxLength(100);
         });
     }
 }

@@ -14,8 +14,8 @@ public class ZoneRepository : IZoneRepository
     public async Task<Zone?> GetByIdAsync(int id, CancellationToken ct = default)
         => await _db.Zones.FirstOrDefaultAsync(t => t.Id == id, ct);
 
-    public async Task<Zone?> GetByNameAsync(string name, CancellationToken ct = default)
-        => await _db.Zones.FirstOrDefaultAsync(t => t.Name == name, ct);
+    public async Task<Zone?> GetByThemeAsync(string name, CancellationToken ct = default)
+        => await _db.Zones.FirstOrDefaultAsync(t => t.Theme == name, ct);
 
     public async Task<IReadOnlyList<Zone>> ListAsync(CancellationToken ct = default)
         => await _db.Zones.AsNoTracking().ToListAsync(ct);

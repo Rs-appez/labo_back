@@ -1,3 +1,3 @@
 namespace ParcBack.Application.Zones.CreateZone;
 
-public record CreateZoneCommand(string Name);
+public record CreateZoneCommand(string Theme);
