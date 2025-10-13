@@ -1,44 +1,52 @@
-var builder = WebApplication.CreateBuilder(args);
+using ParcBack.Application.Abstractions;
+using ParcBack.Application.Zones;
+using ParcBack.Application.Zones.CreateZone;
+using ParcBack.Application.Zones.GetZoneById;
+using ParcBack.Application.Zones.ListZones;
+using ParcBack.Infrastructure.Persistence;
+using ParcBack.Infrastructure.Repositories;
+using ParcBack.Domain.Abstractions;
+using ParcBack.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
+using ParcBack.Application.Zones.DeleteZone;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+internal class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-app.UseHttpsRedirection();
+        // Add services to the container.
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+        var conn = builder.Configuration.GetConnectionString("Default") ?? "Data Source=app.db";
+        builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite(conn));
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+        // Infra
+        builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+        builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
 
-app.Run();
+        // Handlers (CQS without MediatR)
+        builder.Services.AddScoped<ICommandHandler<CreateZoneCommand, int>, CreateZoneHandler>();
+        builder.Services.AddScoped<IQueryHandler<GetZoneByIdQuery, ZoneDto?>, GetZoneByIdHandler>();
+        builder.Services.AddScoped<IQueryHandler<ListZonesQuery, IReadOnlyList<ZoneDto>>, ListZonesHandler>();
+        builder.Services.AddScoped<ICommandHandler<DeleteZoneCommand, int>, DeleteZoneHandler>();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.MapControllers();
+        app.Run();
+    }
 }
