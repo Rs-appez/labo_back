@@ -1,14 +1,8 @@
-using ParcBack.Application.Zones;
 using ParcBack.Application.Zones.CreateZone;
-using ParcBack.Application.Zones.GetZoneById;
-using ParcBack.Application.Zones.ListZones;
 using ParcBack.Infrastructure.Persistence;
 using ParcBack.Infrastructure.Repositories;
 using ParcBack.Domain.Abstractions;
-using ParcBack.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ParcBack.Application.Zones.DeleteZone;
-using MediatR;
 
 
 internal class Program
@@ -26,18 +20,18 @@ internal class Program
         var conn = builder.Configuration.GetConnectionString("Default") ?? "Data Source=app.db";
         builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite(conn));
 
+
         // Infra
         builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
-        builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<ZoneRepository>()
+            .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Repository")))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
 
         builder.Services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssemblies(
-                typeof(CreateZoneHandler).Assembly,
-                typeof(GetZoneByIdHandler).Assembly,
-                typeof(ListZonesHandler).Assembly,
-                typeof(DeleteZoneHandler).Assembly
-                    );
+            cfg.RegisterServicesFromAssemblies(typeof(CreateZoneHandler).Assembly);
         });
 
 
