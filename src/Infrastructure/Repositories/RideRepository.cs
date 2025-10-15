@@ -12,10 +12,10 @@ public class RideRepository : IRideRepository
     public RideRepository(AppDbContext db) => _db = db;
 
     public async Task<Ride?> GetByIdAsync(int id, CancellationToken ct = default)
-        => await _db.Rides.FirstOrDefaultAsync(t => t.Id == id, ct);
+        => await _db.Rides.Include(z => z.Zone).FirstOrDefaultAsync(t => t.Id == id, ct);
 
     public async Task<IReadOnlyList<Ride>> ListAsync(CancellationToken ct = default)
-        => await _db.Rides.AsNoTracking().ToListAsync(ct);
+        => await _db.Rides.Include(z => z.Zone).AsNoTracking().ToListAsync(ct);
 
     public async Task AddAsync(Ride item, CancellationToken ct = default)
         => await _db.Rides.AddAsync(item, ct);
