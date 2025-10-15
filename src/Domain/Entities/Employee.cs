@@ -10,11 +10,7 @@ public class Employee
     public required string Email { get; set; }
 
     [Required, MaxLength(200), MinLength(8)]
-    public string? PasswordHash { get; set; }
-
-    [Required, MaxLength(200), MinLength(8)]
-    public string? Salt { get; set; }
-
+    public string PasswordHash { get; set; }
 
     public bool IsActive { get; set; } = true;
 

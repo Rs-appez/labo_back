@@ -40,7 +40,6 @@ public class AppDbContext : DbContext
             b.Property(x => x.Email).IsRequired().HasMaxLength(100);
             b.HasIndex(x => x.Email).IsUnique();
             b.Property(x => x.PasswordHash).IsRequired().HasMaxLength(200);
-            b.Property(x => x.Salt).IsRequired().HasMaxLength(200);
             b.Property(x => x.IsActive).IsRequired();
             b.Property(x => x.CreatedAt).IsRequired();
             b.Property(x => x.LastLoginAt).IsRequired(false);
