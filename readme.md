@@ -44,9 +44,9 @@ Les taches sont
 catégorisées et associées à une attraction :
 
 - Entretien de site (ramassage des déchets autour de l'attraction)
-- Entretien (vériﬁcation de l'état de l'attraction) Réparation (faite par
-- un employé qualiﬁé) Accueil des visiteurs (gérer les visiteurs de
-- l'attraction)
+- Entretien (vériﬁcation de l'état de l'attraction)
+- Réparation (faite par un employé qualifié)
+- Accueil des visiteurs (gérer les visiteurs de l'attraction)
 
 Cette gestion de tâches devrait apparaitre sous forme d'agenda aﬁn de
 faciliter le travail des chefs de service
