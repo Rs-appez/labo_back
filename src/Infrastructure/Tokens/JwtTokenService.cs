@@ -22,12 +22,10 @@ public sealed class JwtTokenService : ITokenService
         {
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.Email, email),
-            new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Name, email)
         };
 
         if (!string.IsNullOrWhiteSpace(role))
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim("role", role));
 
         if (extraClaims != null)
         {
