@@ -14,6 +14,9 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<Employee?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => await _db.Employees.FirstOrDefaultAsync(e => e.Id == id, ct);
 
+    public async Task<Employee?> GetByEmailAsync(string email, CancellationToken ct = default)
+        => await _db.Employees.FirstOrDefaultAsync(e => e.Email == email, ct);
+
     public async Task<IReadOnlyList<Employee>> ListAsync(CancellationToken ct = default)
         => await _db.Employees.AsNoTracking().ToListAsync(ct);
 
