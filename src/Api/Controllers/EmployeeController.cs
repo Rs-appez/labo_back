@@ -4,6 +4,7 @@ using ParcBack.Application.Employees.Register;
 // using ParcBack.Application.Employees.ListEmployees;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ParcBack.Application.Employees.Login;
 
 namespace ParcBack.Api.Controllers;
 
@@ -31,6 +32,22 @@ public class EmployeesController : ControllerBase
             return BadRequest(ex.Message);
         }
         return CreatedAtAction(nameof(GetById), new { id }, id);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] RegisterRequest body, CancellationToken ct)
+    {
+        try
+        {
+            EmployeeDto employee = await _mediator.Send(new LoginQuery(body.Email, body.Password), ct);
+            if (employee == null) return Unauthorized("Invalid email or password");
+            return Ok(employee);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id:guid}")]
