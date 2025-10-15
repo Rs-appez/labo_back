@@ -5,9 +5,8 @@ namespace ParcBack.Domain.Entities;
 public class Ride
 {
     public int Id { get; private set; }
-    [Required]
-    [MaxLength(100)]
-    [MinLength(3)]
+
+    [Required, MaxLength(100), MinLength(3)]
     public required string Name { get; set; }
     [Required]
     public required Zone Zone { get; set; }
