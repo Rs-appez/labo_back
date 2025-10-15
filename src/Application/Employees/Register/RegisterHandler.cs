@@ -24,7 +24,7 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, Guid>
             Email = command.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
         };
-        await _repo.AddAsync(item, ct);
+        await _repo.Register(item, ct);
         await _uow.SaveChangesAsync(ct);
 
         return item.Id;

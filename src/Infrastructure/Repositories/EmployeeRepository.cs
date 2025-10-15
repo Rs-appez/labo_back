@@ -17,7 +17,7 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<IReadOnlyList<Employee>> ListAsync(CancellationToken ct = default)
         => await _db.Employees.AsNoTracking().ToListAsync(ct);
 
-    public async Task AddAsync(Employee item, CancellationToken ct = default)
+    public async Task Register(Employee item, CancellationToken ct = default)
         => await _db.Employees.AddAsync(item, ct);
 
     public void Remove(Employee item) => _db.Employees.Remove(item);
