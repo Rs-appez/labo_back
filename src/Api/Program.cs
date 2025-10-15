@@ -3,6 +3,11 @@ using ParcBack.Infrastructure.Persistence;
 using ParcBack.Infrastructure.Repositories;
 using ParcBack.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using ParcBack.Domain.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ParcBack.Infrastructure.Tokens;
 
 
 internal class Program
@@ -21,7 +26,30 @@ internal class Program
         builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite(conn));
 
 
-        // Infra
+        // Tokens
+        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()!;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwt.Issuer,
+                    ValidAudience = jwt.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
+                };
+            });
+
+        builder.Services.AddAuthorization();
+        builder.Services.AddScoped<ITokenService, JwtTokenService>();
+
+
+        // Repositories
         builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<ZoneRepository>()
@@ -43,6 +71,9 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
         app.Run();
