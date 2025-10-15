@@ -5,6 +5,7 @@ using ParcBack.Application.Employees.Register;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ParcBack.Application.Employees.Login;
+using ParcBack.Domain.Tokens;
 
 namespace ParcBack.Api.Controllers;
 
@@ -13,8 +14,13 @@ namespace ParcBack.Api.Controllers;
 public class EmployeesController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ITokenService _tokenService;
 
-    public EmployeesController(IMediator mediator) { _mediator = mediator; }
+    public EmployeesController(IMediator mediator, ITokenService tokenService)
+    {
+        _mediator = mediator;
+        _tokenService = tokenService;
+    }
 
 
     public record RegisterRequest(string Email, string Password);
@@ -41,7 +47,8 @@ public class EmployeesController : ControllerBase
         {
             EmployeeDto employee = await _mediator.Send(new LoginQuery(body.Email, body.Password), ct);
             if (employee == null) return Unauthorized("Invalid email or password");
-            return Ok(employee);
+            var token  =_tokenService.GenerateToken(employee);
+            return Ok(new { Employee = employee, Token = token });
 
         }
         catch (Exception ex)
