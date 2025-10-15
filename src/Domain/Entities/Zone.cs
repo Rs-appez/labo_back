@@ -16,4 +16,6 @@ public class Zone
     {
         Theme = theme;
     }
+
+    public override string ToString() => $"Zone {{ Id = {Id}, Theme = {Theme} }}";
 }

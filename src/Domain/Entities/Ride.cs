@@ -20,4 +20,6 @@ public class Ride
         Zone = zone;
     }
 
+    public override string ToString() => $"Ride {{ Id = {Id}, Name = {Name}, Zone = {Zone} }}";
+
 }
