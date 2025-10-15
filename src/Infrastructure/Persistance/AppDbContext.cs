@@ -6,6 +6,7 @@ namespace ParcBack.Infrastructure.Persistence;
 public class AppDbContext : DbContext
 {
     public DbSet<Zone> Zones => Set<Zone>();
+    public DbSet<Ride> Rides => Set<Ride>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -17,6 +18,18 @@ public class AppDbContext : DbContext
             b.HasKey(x => x.Id);
             b.HasIndex(x => x.Theme).IsUnique(); 
             b.Property(x => x.Theme).IsRequired().HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<Ride>(b =>
+        {
+            b.ToTable("Rides");
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            b.HasOne(x => x.Zone)
+             .WithMany()
+             .HasForeignKey("ZoneId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
