@@ -1,6 +1,7 @@
 using ParcBack.Application.Rides;
 using ParcBack.Application.Rides.CreateRide;
 using ParcBack.Application.Rides.GetRideById;
+using ParcBack.Application.Rides.ListRides;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
@@ -39,12 +40,12 @@ public class RidesController : ControllerBase
         return dto is null ? NotFound() : Ok(dto);
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult<IReadOnlyList<RideDto>>> List(CancellationToken ct)
-    // {
-    //     var dtos = await _mediator.Send(new ListRidesQuery(), ct);
-    //     return Ok(dtos);
-    // }
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<RideDto>>> List(CancellationToken ct)
+    {
+        var dtos = await _mediator.Send(new ListRidesQuery(), ct);
+        return Ok(dtos);
+    }
     //
     // [HttpDelete("{id:int}")]
     // public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
