@@ -1,5 +1,6 @@
 using ParcBack.Application.Rides;
 using ParcBack.Application.Rides.CreateRide;
+using ParcBack.Application.Rides.GetRideById;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
@@ -34,9 +35,8 @@ public class RidesController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<RideDto>> GetById(int id, CancellationToken ct)
     {
-        throw new NotImplementedException();
-        // var dto = await _mediator.Send(new GetRideByIdQuery(id), ct);
-        // return dto is null ? NotFound() : Ok(dto);
+        var dto = await _mediator.Send(new GetRideByIdQuery(id), ct);
+        return dto is null ? NotFound() : Ok(dto);
     }
 
     // [HttpGet]
