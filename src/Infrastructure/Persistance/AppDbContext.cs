@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<Zone> Zones => Set<Zone>();
     public DbSet<Ride> Rides => Set<Ride>();
+    public DbSet<Employee> Employees => Set<Employee>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -30,6 +31,19 @@ public class AppDbContext : DbContext
              .HasForeignKey("ZoneId")
              .IsRequired()
              .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Employee>(b =>
+        {
+            b.ToTable("Employees");
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Email).IsRequired().HasMaxLength(100);
+            b.HasIndex(x => x.Email).IsUnique();
+            b.Property(x => x.PasswordHash).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Salt).IsRequired().HasMaxLength(200);
+            b.Property(x => x.IsActive).IsRequired();
+            b.Property(x => x.CreatedAt).IsRequired();
+            b.Property(x => x.LastLoginAt).IsRequired(false);
         });
     }
 }
