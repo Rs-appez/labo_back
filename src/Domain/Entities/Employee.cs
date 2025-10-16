@@ -15,6 +15,8 @@ public class Employee
     public bool IsActive { get; set; } = true;
     public Role Role { get; set; } 
 
+    public Guid? ChiefId { get; set; }
+
     public DateTime CreatedAt
     { get; private set; } = DateTime.UtcNow;
     public DateTime? LastLoginAt { get; set; }

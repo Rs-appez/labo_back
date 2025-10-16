@@ -1,7 +1,7 @@
 using ParcBack.Application.Employees;
 using ParcBack.Application.Employees.Register;
 // using ParcBack.Application.Employees.GetEmployeeById;
-// using ParcBack.Application.Employees.ListEmployees;
+using ParcBack.Application.Employees.ListAllEmployees;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ParcBack.Application.Employees.Login;
@@ -72,6 +72,11 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<EmployeeDto>>> List(CancellationToken ct)
     {
+        if (_tokenService.IsAdminToken(User))
+        {
+            IReadOnlyList<EmployeeDto> dtos = await _mediator.Send(new ListAllEmployeesQuery(), ct);
+            return Ok(dtos);
+        }
         if (!_tokenService.IsChiefToken(User))
             return StatusCode(403, "Only chiefs can list employees.");
 

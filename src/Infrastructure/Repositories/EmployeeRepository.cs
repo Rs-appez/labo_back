@@ -17,8 +17,8 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<Employee?> GetByEmailAsync(string email, CancellationToken ct = default)
         => await _db.Employees.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == email, ct);
 
-    public async Task<IReadOnlyList<Employee>> ListAsync(CancellationToken ct = default)
-        => await _db.Employees.Include(e => e.Role).AsNoTracking().ToListAsync(ct);
+    public async Task<IReadOnlyList<Employee>> ListAsync(Guid? chefId = null, CancellationToken ct = default)
+        => await _db.Employees.Where(e => chefId == null || e.ChiefId == chefId).Include(e => e.Role).AsNoTracking().ToListAsync(ct);
 
     public async Task Register(Employee item, CancellationToken ct = default)
         => await _db.Employees.AddAsync(item, ct);
@@ -28,5 +28,3 @@ public class EmployeeRepository : IEmployeeRepository
     public void Update(Employee item) => _db.Employees.Update(item);
 
 }
-
-
