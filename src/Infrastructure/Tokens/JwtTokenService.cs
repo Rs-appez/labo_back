@@ -47,14 +47,14 @@ public sealed class JwtTokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    private bool IsXToken(ClaimsPrincipal user, string role)
+    private bool IsXToken(ClaimsPrincipal user, List<string> role)
     {
         if (user.Identity?.IsAuthenticated != true)
             return false;
 
         var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
 
-        if (roleClaim == null || roleClaim.Value != role)
+        if (roleClaim == null || !role.Contains(roleClaim.Value))
             return false;
 
         var isActiveClaim = user.Claims.FirstOrDefault(c => c.Type == "isActive");
@@ -65,15 +65,15 @@ public sealed class JwtTokenService : ITokenService
     }
     public bool IsEmployeeToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, "Employee");
+        return IsXToken(user, ["Employee", "Admin", "Chief"]);
     }
 
     public bool IsAdminToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, "Admin");
+        return IsXToken(user, ["Admin"]);
     }
     public bool IsChiefToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, "Chief");
+        return IsXToken(user, ["Chief", "Admin"]);
     }
 }
