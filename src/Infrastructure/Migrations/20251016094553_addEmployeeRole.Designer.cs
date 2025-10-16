@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParcBack.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ParcBack.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016094553_addEmployeeRole")]
+    partial class addEmployeeRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -42,15 +45,14 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Employees", (string)null);
                 });
@@ -76,42 +78,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Rides", (string)null);
                 });
 
-            modelBuilder.Entity("ParcBack.Domain.Entities.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Chief"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Employee"
-                        });
-                });
-
             modelBuilder.Entity("ParcBack.Domain.Entities.Zone", b =>
                 {
                     b.Property<int>("Id")
@@ -129,17 +95,6 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Zones", (string)null);
-                });
-
-            modelBuilder.Entity("ParcBack.Domain.Entities.Employee", b =>
-                {
-                    b.HasOne("ParcBack.Domain.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("ParcBack.Domain.Entities.Ride", b =>

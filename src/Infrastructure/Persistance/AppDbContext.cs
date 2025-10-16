@@ -6,6 +6,7 @@ namespace ParcBack.Infrastructure.Persistence;
 public class AppDbContext : DbContext
 {
     public DbSet<Zone> Zones => Set<Zone>();
+    public DbSet<Role> Roles => Set<Role>();
     public DbSet<Ride> Rides => Set<Ride>();
     public DbSet<Employee> Employees => Set<Employee>();
 
@@ -17,7 +18,7 @@ public class AppDbContext : DbContext
         {
             b.ToTable("Zones");
             b.HasKey(x => x.Id);
-            b.HasIndex(x => x.Theme).IsUnique(); 
+            b.HasIndex(x => x.Theme).IsUnique();
             b.Property(x => x.Theme).IsRequired().HasMaxLength(100);
         });
 
@@ -33,6 +34,20 @@ public class AppDbContext : DbContext
              .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<Role>(b =>
+        {
+            b.ToTable("Roles");
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Name).IsRequired().HasMaxLength(50);
+            b.HasIndex(x => x.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<Role>().HasData(
+            new Role { Id = 1, Name = "Admin" },
+            new Role { Id = 2, Name = "Chief" },
+            new Role { Id = 3, Name = "Employee" }
+        );
+
         modelBuilder.Entity<Employee>(b =>
         {
             b.ToTable("Employees");
@@ -40,6 +55,11 @@ public class AppDbContext : DbContext
             b.Property(x => x.Email).IsRequired().HasMaxLength(100);
             b.HasIndex(x => x.Email).IsUnique();
             b.Property(x => x.PasswordHash).IsRequired().HasMaxLength(200);
+            b.HasOne(x => x.Role)
+             .WithMany()
+             .HasForeignKey("RoleId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Restrict);
             b.Property(x => x.IsActive).IsRequired();
             b.Property(x => x.CreatedAt).IsRequired();
             b.Property(x => x.LastLoginAt).IsRequired(false);

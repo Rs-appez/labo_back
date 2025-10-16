@@ -9,6 +9,7 @@ public static class Mappers
             employee.Id,
             employee.Email,
             employee.IsActive,
+            employee.Role,
             employee.CreatedAt,
             employee.LastLoginAt
         );

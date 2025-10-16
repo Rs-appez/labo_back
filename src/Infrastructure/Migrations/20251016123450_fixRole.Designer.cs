@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParcBack.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ParcBack.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016123450_fixRole")]
+    partial class fixRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -82,6 +85,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -98,16 +104,19 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            Level = 1,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
+                            Level = 2,
                             Name = "Chief"
                         },
                         new
                         {
                             Id = 3,
+                            Level = 3,
                             Name = "Employee"
                         });
                 });
