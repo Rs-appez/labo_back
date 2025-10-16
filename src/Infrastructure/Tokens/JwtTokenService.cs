@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using ParcBack.Domain.Tokens;
 using System.Text;
+using ParcBack.Domain.Entities;
 
 namespace ParcBack.Infrastructure.Tokens;
 
@@ -16,16 +17,14 @@ public sealed class JwtTokenService : ITokenService
         _opt = options.Value;
     }
 
-    public string GenerateToken(Guid userId, string email, string? role = null, IDictionary<string, string>? extraClaims = null)
+    public string GenerateToken(Guid userId, string email, Role role, IDictionary<string, string>? extraClaims = null)
     {
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.Email, email),
+            new ("role", role.Name),
         };
-
-        if (!string.IsNullOrWhiteSpace(role))
-            claims.Add(new Claim("role", role));
 
         if (extraClaims != null)
         {
@@ -47,14 +46,15 @@ public sealed class JwtTokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    private bool IsXToken(ClaimsPrincipal user, List<string> role)
+    private bool IsXToken(ClaimsPrincipal user, string role)
     {
         if (user.Identity?.IsAuthenticated != true)
             return false;
 
         var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+        Console.WriteLine("roleClaim : " + roleClaim);
 
-        if (roleClaim == null || !role.Contains(roleClaim.Value))
+        if (roleClaim == null || roleClaim.Value != role)
             return false;
 
         var isActiveClaim = user.Claims.FirstOrDefault(c => c.Type == "isActive");
@@ -65,15 +65,14 @@ public sealed class JwtTokenService : ITokenService
     }
     public bool IsEmployeeToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, ["Employee", "Admin", "Chief"]);
+        return IsXToken(user, "Employee") || IsChiefToken(user);
     }
-
     public bool IsAdminToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, ["Admin"]);
+        return IsXToken(user, "Admin");
     }
     public bool IsChiefToken(ClaimsPrincipal user)
     {
-        return IsXToken(user, ["Chief", "Admin"]);
+        return IsXToken(user, "Chief") || IsAdminToken(user);
     }
 }
