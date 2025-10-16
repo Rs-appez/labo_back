@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Ride> Rides => Set<Ride>();
     public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Chief> Chiefs => Set<Chief>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -63,6 +64,16 @@ public class AppDbContext : DbContext
             b.Property(x => x.IsActive).IsRequired();
             b.Property(x => x.CreatedAt).IsRequired();
             b.Property(x => x.LastLoginAt).IsRequired(false);
+        });
+
+        modelBuilder.Entity<Chief>(b =>
+        {
+            b.ToTable("Chiefs");
+            b.HasMany(c => c.Employees)
+             .WithOne()
+             .HasForeignKey("ChiefId")
+             .IsRequired(false)
+             .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }
