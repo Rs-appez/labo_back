@@ -73,7 +73,8 @@ public class EmployeesController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<EmployeeDto>>> List(CancellationToken ct)
     {
         if (!_tokenService.IsChiefToken(User))
-            return Forbid("Only chiefs can list employees.");
+            return StatusCode(403, "Only chiefs can list employees.");
+
         throw new NotImplementedException();
         // var dtos = await _mediator.Send(new ListEmployeesQuery(), ct);
         // return Ok(dtos);
@@ -98,5 +99,3 @@ public class EmployeesController : ControllerBase
     //
     // }
 }
-
-

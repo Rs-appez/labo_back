@@ -30,7 +30,8 @@ public class RidesController : ControllerBase
     public async Task<ActionResult<int>> Create([FromBody] CreateRideRequest body, CancellationToken ct)
     {
         if (!_tokenService.IsAdminToken(User))
-            return Forbid("Only admins can create rides.");
+            return StatusCode(403, "Only admins can create rides.");
+
         int id;
         try
         {
@@ -61,7 +62,8 @@ public class RidesController : ControllerBase
     // public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
     // {
     //     if (!_tokenService.IsAdminToken(User))
-    //         return Forbid("Only admins can delete rides.");
+                // return StatusCode(403, "Only admins can delete zones.");
+                //
     //     try
     //     {
     //         var deletedId = await _mediator.Send(new DeleteRideCommand(id), ct);

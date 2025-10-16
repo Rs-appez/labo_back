@@ -31,7 +31,8 @@ public class ZonesController : ControllerBase
     public async Task<ActionResult<int>> Create([FromBody] CreateZoneRequest body, CancellationToken ct)
     {
         if (!_tokenService.IsAdminToken(User))
-            return Forbid("Only admins can create zones.");
+            return StatusCode(403, "Only admins can create zones.");
+
         int id;
         try
         {
@@ -62,7 +63,8 @@ public class ZonesController : ControllerBase
     public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
     {
         if (!_tokenService.IsAdminToken(User))
-            return Forbid("Only admins can delete zones.");
+            return StatusCode(403, "Only admins can delete zones.");
+
         try
         {
             var deletedId = await _mediator.Send(new DeleteZoneCommand(id), ct);
