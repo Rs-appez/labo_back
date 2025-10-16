@@ -52,7 +52,6 @@ public sealed class JwtTokenService : ITokenService
             return false;
 
         var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
-        Console.WriteLine("roleClaim : " + roleClaim);
 
         if (roleClaim == null || roleClaim.Value != role)
             return false;
