@@ -46,4 +46,21 @@ public sealed class JwtTokenService : ITokenService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public bool IsEmployeeToken(ClaimsPrincipal user)
+    {
+        if (user.Identity?.IsAuthenticated != true)
+            return false;
+
+        var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+        if (roleClaim == null || roleClaim.Value != "Employee")
+            return false;
+
+        var isActiveClaim = user.Claims.FirstOrDefault(c => c.Type == "isActive");
+        if (isActiveClaim == null || !bool.TryParse(isActiveClaim.Value, out var isActive) || !isActive)
+            return false;
+
+        return true;
+    }
 }
