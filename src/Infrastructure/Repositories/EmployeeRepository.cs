@@ -12,13 +12,13 @@ public class EmployeeRepository : IEmployeeRepository
     public EmployeeRepository(AppDbContext db) => _db = db;
 
     public async Task<Employee?> GetByIdAsync(Guid id, CancellationToken ct = default)
-        => await _db.Employees.FirstOrDefaultAsync(e => e.Id == id, ct);
+        => await _db.Employees.Include(e => e.Role).FirstOrDefaultAsync(e => e.Id == id, ct);
 
     public async Task<Employee?> GetByEmailAsync(string email, CancellationToken ct = default)
-        => await _db.Employees.FirstOrDefaultAsync(e => e.Email == email, ct);
+        => await _db.Employees.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == email, ct);
 
     public async Task<IReadOnlyList<Employee>> ListAsync(CancellationToken ct = default)
-        => await _db.Employees.AsNoTracking().ToListAsync(ct);
+        => await _db.Employees.Include(e => e.Role).AsNoTracking().ToListAsync(ct);
 
     public async Task Register(Employee item, CancellationToken ct = default)
         => await _db.Employees.AddAsync(item, ct);
