@@ -72,6 +72,8 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<EmployeeDto>>> List(CancellationToken ct)
     {
+        if (!_tokenService.IsChiefToken(User))
+            return Forbid("Only chiefs can list employees.");
         throw new NotImplementedException();
         // var dtos = await _mediator.Send(new ListEmployeesQuery(), ct);
         // return Ok(dtos);

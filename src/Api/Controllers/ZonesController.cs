@@ -6,6 +6,7 @@ using ParcBack.Application.Zones.DeleteZone;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using ParcBack.Domain.Tokens;
 
 namespace ParcBack.Api.Controllers;
 
@@ -15,8 +16,13 @@ namespace ParcBack.Api.Controllers;
 public class ZonesController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ITokenService _tokenService;
 
-    public ZonesController(IMediator mediator) { _mediator = mediator; }
+    public ZonesController(IMediator mediator, ITokenService tokenService)
+    {
+        _mediator = mediator;
+        _tokenService = tokenService;
+    }
 
 
     public record CreateZoneRequest(string Theme);
@@ -24,6 +30,8 @@ public class ZonesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateZoneRequest body, CancellationToken ct)
     {
+        if (!_tokenService.IsAdminToken(User))
+            return Forbid("Only admins can create zones.");
         int id;
         try
         {
@@ -53,6 +61,8 @@ public class ZonesController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
     {
+        if (!_tokenService.IsAdminToken(User))
+            return Forbid("Only admins can delete zones.");
         try
         {
             var deletedId = await _mediator.Send(new DeleteZoneCommand(id), ct);

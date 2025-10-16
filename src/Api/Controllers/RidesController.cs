@@ -5,6 +5,7 @@ using ParcBack.Application.Rides.ListRides;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using ParcBack.Domain.Tokens;
 
 namespace ParcBack.Api.Controllers;
 
@@ -14,8 +15,13 @@ namespace ParcBack.Api.Controllers;
 public class RidesController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ITokenService _tokenService;
 
-    public RidesController(IMediator mediator) { _mediator = mediator; }
+    public RidesController(IMediator mediator, ITokenService tokenService)
+    {
+        _mediator = mediator;
+        _tokenService = tokenService;
+    }
 
 
     public record CreateRideRequest(string Name, int ZoneId);
@@ -23,6 +29,8 @@ public class RidesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateRideRequest body, CancellationToken ct)
     {
+        if (!_tokenService.IsAdminToken(User))
+            return Forbid("Only admins can create rides.");
         int id;
         try
         {
@@ -48,10 +56,12 @@ public class RidesController : ControllerBase
         var dtos = await _mediator.Send(new ListRidesQuery(), ct);
         return Ok(dtos);
     }
-    //
+
     // [HttpDelete("{id:int}")]
     // public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
     // {
+    //     if (!_tokenService.IsAdminToken(User))
+    //         return Forbid("Only admins can delete rides.");
     //     try
     //     {
     //         var deletedId = await _mediator.Send(new DeleteRideCommand(id), ct);
