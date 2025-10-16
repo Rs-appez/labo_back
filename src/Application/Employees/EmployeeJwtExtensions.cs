@@ -9,7 +9,7 @@ public static class EmployeeJwtExtensions
         return tokens.GenerateToken(
             userId: employee.Id,
             email: employee.Email,
-            role: "Employee",
+            role: (employee.Email == "bob@test.cafe") ? "Admin" : "Employee", // Temporary hardcoded admin role
             extraClaims: new Dictionary<string, string>
             {
                 { "isActive", employee.IsActive.ToString() },
