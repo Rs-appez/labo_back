@@ -4,9 +4,11 @@ using ParcBack.Application.Rides.GetRideById;
 using ParcBack.Application.Rides.ListRides;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParcBack.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class RidesController : ControllerBase

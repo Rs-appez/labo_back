@@ -5,9 +5,11 @@ using ParcBack.Application.Zones.ListZones;
 using ParcBack.Application.Zones.DeleteZone;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParcBack.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ZonesController : ControllerBase

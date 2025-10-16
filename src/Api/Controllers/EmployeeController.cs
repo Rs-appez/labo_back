@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ParcBack.Application.Employees.Login;
 using ParcBack.Domain.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParcBack.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
@@ -25,6 +27,7 @@ public class EmployeesController : ControllerBase
 
     public record RegisterRequest(string Email, string Password);
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<Guid>> Register([FromBody] RegisterRequest body, CancellationToken ct)
     {
@@ -40,6 +43,7 @@ public class EmployeesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id }, id);
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] RegisterRequest body, CancellationToken ct)
     {
