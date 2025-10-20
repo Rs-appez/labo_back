@@ -28,12 +28,17 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, int>
         if (Type is null)
             throw new InvalidOperationException($"Task type with id {command.TypeId} does not exist");
 
-        Employee? employee = await _employeeRepo.GetByIdAsync(command.EmployeeId, ct);
-        if (employee is null)
-            throw new InvalidOperationException($"Employee with id {command.EmployeeId} does not exist");
+        Employee? employee = null;
+        if (command.EmployeeId is not null)
+        {
+            employee = await _employeeRepo.GetByIdAsync(command.EmployeeId.Value, ct);
+            if (employee is null)
+                throw new InvalidOperationException($"Employee with id {command.EmployeeId} does not exist");
 
-        if (!employee.IsActive)
-            throw new InvalidOperationException($"Cannot assign task to inactive employee ");
+            if (!employee.IsActive)
+                throw new InvalidOperationException($"Cannot assign task to inactive employee ");
+
+        }
 
         var item = new EmployeeTask()
         {

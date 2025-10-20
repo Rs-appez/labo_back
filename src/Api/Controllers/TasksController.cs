@@ -23,7 +23,7 @@ public class TasksController : ControllerBase
     }
 
 
-    public record CreateTaskRequest(int TaskTypeId, Guid AssignedEmployeeId, DateTime start, DateTime end);
+    public record CreateTaskRequest(int TaskTypeId, Guid? AssignedEmployeeId, DateTime start, DateTime end);
 
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateTaskRequest body, CancellationToken ct)

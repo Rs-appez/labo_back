@@ -10,7 +10,7 @@ public static class Mappers
         => new(
             task.Id,
             task.Type.ToDto(),
-            task.EmployeeAssigned.Id,
+            task.EmployeeAssigned?.Id,
             task.IsCompleted,
             task.IsValidated,
             task.StartTime,
