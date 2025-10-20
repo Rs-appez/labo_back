@@ -23,7 +23,7 @@ public class TasksController : ControllerBase
     }
 
 
-    public record CreateTaskRequest(int TaskTypeId, Guid AssignedEmployeeId);
+    public record CreateTaskRequest(int TaskTypeId, Guid AssignedEmployeeId, DateTime start, DateTime end);
 
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateTaskRequest body, CancellationToken ct)
@@ -34,7 +34,8 @@ public class TasksController : ControllerBase
         int id;
         try
         {
-            id = await _mediator.Send(new CreateTaskCommand(body.TaskTypeId, body.AssignedEmployeeId), ct);
+            id = await _mediator.Send(new CreateTaskCommand(
+                        body.TaskTypeId, body.AssignedEmployeeId, body.start, body.end), ct);
         }
         catch (Exception ex)
         {

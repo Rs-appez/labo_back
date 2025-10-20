@@ -39,6 +39,8 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, int>
         {
             Type = Type,
             EmployeeAssigned = employee,
+            StartTime = command.StartTime,
+            EndTime = command.EndTime,
         };
         await _repo.AddAsync(item, ct);
         await _uow.SaveChangesAsync(ct);

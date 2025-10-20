@@ -12,6 +12,8 @@ public static class Mappers
             task.Type.ToDto(),
             task.EmployeeAssigned.Id,
             task.IsCompleted,
-            task.IsValidated
+            task.IsValidated,
+            task.StartTime,
+            task.EndTime
         );
 }
