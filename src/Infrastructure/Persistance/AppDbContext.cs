@@ -69,6 +69,11 @@ public class AppDbContext : DbContext
             b.Property(x => x.IsActive).IsRequired();
             b.Property(x => x.CreatedAt).IsRequired();
             b.Property(x => x.LastLoginAt).IsRequired(false);
+            b.HasOne(x => x.Chief)
+             .WithMany()
+             .HasForeignKey("ChiefId")
+             .IsRequired(false)
+             .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Chief>(b =>
@@ -132,5 +137,4 @@ public class AppDbContext : DbContext
              .OnDelete(DeleteBehavior.SetNull);
         });
     }
-
 }

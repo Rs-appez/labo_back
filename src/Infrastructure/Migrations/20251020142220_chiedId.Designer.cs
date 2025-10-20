@@ -11,14 +11,43 @@ using ParcBack.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251020081403_defaultTaskType")]
-    partial class defaultTaskType
+    [Migration("20251020142220_chiedId")]
+    partial class chiedId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+
+            modelBuilder.Entity("ParcBack.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("Comments", (string)null);
+                });
 
             modelBuilder.Entity("ParcBack.Domain.Entities.Employee", b =>
                 {
@@ -71,10 +100,27 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsValidated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("TypeId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("TypeId");
 
@@ -205,10 +251,34 @@ namespace Infrastructure.Migrations
                     b.ToTable("Chiefs", (string)null);
                 });
 
+            modelBuilder.Entity("ParcBack.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("ParcBack.Domain.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("ParcBack.Domain.Entities.EmployeeTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("ParcBack.Domain.Entities.Employee", b =>
                 {
                     b.HasOne("ParcBack.Domain.Entities.Chief", null)
                         .WithMany("Employees")
+                        .HasForeignKey("ChiefId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ParcBack.Domain.Entities.Employee", "Chief")
+                        .WithMany()
                         .HasForeignKey("ChiefId")
                         .OnDelete(DeleteBehavior.SetNull);
 
@@ -218,16 +288,25 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Chief");
+
                     b.Navigation("Role");
                 });
 
             modelBuilder.Entity("ParcBack.Domain.Entities.EmployeeTask", b =>
                 {
+                    b.HasOne("ParcBack.Domain.Entities.Employee", "EmployeeAssigned")
+                        .WithMany("Tasks")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("ParcBack.Domain.Entities.TaskType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("EmployeeAssigned");
 
                     b.Navigation("Type");
                 });
@@ -250,6 +329,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ParcBack.Domain.Entities.Chief", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ParcBack.Domain.Entities.Employee", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("ParcBack.Domain.Entities.Chief", b =>

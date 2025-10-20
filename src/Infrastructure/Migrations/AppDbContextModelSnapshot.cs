@@ -274,11 +274,18 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ChiefId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("ParcBack.Domain.Entities.Employee", "Chief")
+                        .WithMany()
+                        .HasForeignKey("ChiefId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ParcBack.Domain.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Chief");
 
                     b.Navigation("Role");
                 });

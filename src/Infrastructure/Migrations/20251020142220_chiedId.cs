@@ -5,24 +5,25 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addEmployeeRole : Migration
+    public partial class chiedId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Role",
+            migrationBuilder.AddForeignKey(
+                name: "FK_Employees_Employees_ChiefId",
                 table: "Employees",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: "");
+                column: "ChiefId",
+                principalTable: "Employees",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Role",
+            migrationBuilder.DropForeignKey(
+                name: "FK_Employees_Employees_ChiefId",
                 table: "Employees");
         }
     }

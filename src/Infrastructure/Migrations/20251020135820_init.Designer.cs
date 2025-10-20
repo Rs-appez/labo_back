@@ -11,8 +11,8 @@ using ParcBack.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251020123917_add")]
-    partial class add
+    [Migration("20251020135820_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("EmployeeId")
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndTime")
@@ -291,8 +291,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("ParcBack.Domain.Entities.Employee", "EmployeeAssigned")
                         .WithMany("Tasks")
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ParcBack.Domain.Entities.TaskType", "Type")
                         .WithMany()

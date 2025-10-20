@@ -13,9 +13,9 @@ public class Employee
     public required string PasswordHash { get; set; }
 
     public bool IsActive { get; set; } = true;
-    public Role Role { get; set; }
+    public required Role Role { get; set; }
 
-    public Guid? ChiefId { get; set; }
+    public Employee? Chief { get; set; }
 
     public DateTime CreatedAt
     { get; private set; } = DateTime.UtcNow;
@@ -25,6 +25,14 @@ public class Employee
 
     public Employee() { } // Parameterless constructor for EF Core
 
-    public override string ToString() => $"Employee {{ Id = {Id}, Email = {Email}, IsActive = {IsActive}, CreatedAt = {CreatedAt}, LastLoginAt = {LastLoginAt} }}";
-}
+    public override string ToString() => $"Employee {{ Id = {Id}, Email = {Email}, IsActive = {IsActive}, CreatedAt = {CreatedAt}, LastLoginAt = {LastLoginAt}, Role = {Role.Name} }}";
 
+    public void Deactivate()
+    {
+        if (this.Tasks.Any(t => !t.IsValidated))
+        {
+            throw new InvalidOperationException("Cannot deactivate an employee with pending tasks.");
+        }
+        IsActive = false;
+    }
+}
