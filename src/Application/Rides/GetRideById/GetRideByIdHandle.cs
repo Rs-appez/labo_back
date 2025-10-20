@@ -12,9 +12,7 @@ public class GetRideByIdHandler : IRequestHandler<GetRideByIdQuery, RideDto?>
     public async Task<RideDto?> Handle(GetRideByIdQuery query, CancellationToken ct)
     {
         var item = await _repo.GetByIdAsync(query.Id, ct);
-        Console.WriteLine("item : " + item);
 
         return item?.ToDto();
     }
 }
-
