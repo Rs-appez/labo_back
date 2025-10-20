@@ -108,6 +108,8 @@ public class AppDbContext : DbContext
              .HasForeignKey("TypeId")
              .IsRequired()
              .OnDelete(DeleteBehavior.Restrict);
+            b.Property(x => x.IsCompleted).IsRequired();
+            b.Property(x => x.IsValidated).IsRequired();
         });
     }
 }
