@@ -17,7 +17,7 @@ public class TaskRepository : ITaskRepository
                 .FirstOrDefaultAsync(t => t.Id == id, ct);
 
     public async Task<IReadOnlyList<EmployeeTask>> ListAsync(CancellationToken ct = default)
-        => await _db.Tasks.AsNoTracking().ToListAsync(ct);
+        => await _db.Tasks.Include(t => t.Type).AsNoTracking().ToListAsync(ct);
 
     public async Task AddAsync(EmployeeTask item, CancellationToken ct = default)
         => await _db.Tasks.AddAsync(item, ct);
