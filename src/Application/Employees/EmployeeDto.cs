@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ParcBack.Application.EmployeeTasks;
 using ParcBack.Domain.Entities;
 namespace ParcBack.Application.Employees;
 
@@ -23,6 +24,8 @@ public record EmployeeDto(
     Role Role,
 
     DateTime CreatedAt,
-    DateTime? LastLoginAt
+    DateTime? LastLoginAt,
+
+    EmployeeTaskDto[] Tasks
 );
 

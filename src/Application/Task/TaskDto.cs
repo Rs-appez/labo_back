@@ -4,5 +4,7 @@ namespace ParcBack.Application.EmployeeTasks;
 
 public record EmployeeTaskDto(
     int Id,
-    TaskTypeDto Type
+    TaskTypeDto Type,
+    bool IsCompleted,
+    bool IsValidated
 );

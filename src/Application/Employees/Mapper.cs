@@ -1,4 +1,5 @@
 using ParcBack.Domain.Entities;
+using ParcBack.Application.EmployeeTasks;
 
 namespace ParcBack.Application.Employees;
 
@@ -11,8 +12,7 @@ public static class Mappers
             employee.IsActive,
             employee.Role,
             employee.CreatedAt,
-            employee.LastLoginAt
+            employee.LastLoginAt,
+            [.. employee.Tasks.Select(t => t.ToDto())]
         );
 }
-
-

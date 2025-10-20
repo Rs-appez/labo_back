@@ -8,6 +8,8 @@ public static class Mappers
     public static EmployeeTaskDto ToDto(this EmployeeTask task)
         => new EmployeeTaskDto(
             task.Id,
-            task.Type.ToDto()
+            task.Type.ToDto(),
+            task.IsCompleted,
+            task.IsValidated
         );
 }
