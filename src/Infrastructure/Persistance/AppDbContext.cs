@@ -6,10 +6,13 @@ namespace ParcBack.Infrastructure.Persistence;
 public class AppDbContext : DbContext
 {
     public DbSet<Zone> Zones => Set<Zone>();
-    public DbSet<Role> Roles => Set<Role>();
     public DbSet<Ride> Rides => Set<Ride>();
+
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<Chief> Chiefs => Set<Chief>();
+    public DbSet<Role> Roles => Set<Role>();
+
+    public DbSet<TaskType> TaskTypes => Set<TaskType>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -74,6 +77,14 @@ public class AppDbContext : DbContext
              .HasForeignKey("ChiefId")
              .IsRequired(false)
              .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<TaskType>(b =>
+        {
+            b.ToTable("TaskTypes");
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            b.HasIndex(x => x.Name).IsUnique();
         });
     }
 }
