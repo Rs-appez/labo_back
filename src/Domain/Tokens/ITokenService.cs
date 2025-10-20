@@ -6,6 +6,7 @@ namespace ParcBack.Domain.Tokens;
 public interface ITokenService
 {
     string GenerateToken(Guid userId, string email, Role role, IDictionary<string, string>? extraClaims = null);
+    Guid GetUserId(ClaimsPrincipal user);
 
     bool IsEmployeeToken(ClaimsPrincipal user);
     bool IsAdminToken(ClaimsPrincipal user);

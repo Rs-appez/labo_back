@@ -74,4 +74,13 @@ public sealed class JwtTokenService : ITokenService
     {
         return IsXToken(user, "Chief") || IsAdminToken(user);
     }
+
+    public Guid GetUserId(ClaimsPrincipal user)
+    {
+        var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            throw new SecurityTokenException("Invalid token: missing or invalid 'sub' claim.");
+
+        return userId;
+    }
 }
