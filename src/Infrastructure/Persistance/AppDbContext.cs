@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
 
     public DbSet<EmployeeTask> Tasks => Set<EmployeeTask>();
     public DbSet<TaskType> TaskTypes => Set<TaskType>();
+    public DbSet<Comment> Comments => Set<Comment>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -116,5 +117,24 @@ public class AppDbContext : DbContext
              .IsRequired()
              .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<Comment>(b =>
+        {
+            b.ToTable("Comments");
+            b.HasKey(x => x.Id);
+            b.Property(x => x.Content).IsRequired().HasMaxLength(1000);
+            b.Property(x => x.CreatedAt).IsRequired();
+            b.HasOne(x => x.Task)
+             .WithMany()
+             .HasForeignKey("TaskId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Cascade);
+            b.HasOne(x => x.Employee)
+             .WithMany()
+             .HasForeignKey("EmployeeId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.SetNull);
+        });
     }
+
 }
