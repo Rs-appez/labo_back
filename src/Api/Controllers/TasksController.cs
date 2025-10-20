@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using ParcBack.Domain.Tokens;
 using ParcBack.Application.EmployeeTasks.GetTaskById;
+using ParcBack.Application.EmployeeTasks.CreateTask;
 using ParcBack.Application.EmployeeTasks;
 
 namespace ParcBack.Api.Controllers;
@@ -27,20 +28,19 @@ public class TasksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateTaskRequest body, CancellationToken ct)
     {
-        throw new NotImplementedException("Task creation is not implemented yet.");
-        // if (!_tokenService.IsChiefToken(User))
-        //     return StatusCode(403, "Only chief can create task.");
-        //
-        // int id;
-        // try
-        // {
-        //     id = await _mediator.Send(new CreateTaskCommand(body.TaskTypeId), ct);
-        // }
-        // catch (Exception ex)
-        // {
-        //     return BadRequest(ex.Message);
-        // }
-        // return CreatedAtAction(nameof(GetById), new { id }, id);
+        if (!_tokenService.IsChiefToken(User))
+            return StatusCode(403, "Only chief can create task.");
+
+        int id;
+        try
+        {
+            id = await _mediator.Send(new CreateTaskCommand(body.TaskTypeId), ct);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        return CreatedAtAction(nameof(GetById), new { id }, id);
     }
 
     [HttpGet("{id:int}")]
