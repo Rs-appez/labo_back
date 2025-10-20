@@ -1,6 +1,6 @@
 using ParcBack.Application.Employees;
 using ParcBack.Application.Employees.Register;
-// using ParcBack.Application.Employees.GetEmployeeById;
+using ParcBack.Application.Employees.GetEmployeeById;
 using ParcBack.Application.Employees.ListAllEmployees;
 using ParcBack.Application.Employees.ListEmployeesByChief;
 using Microsoft.AspNetCore.Mvc;
@@ -65,9 +65,8 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<EmployeeDto>> GetById(Guid id, CancellationToken ct)
     {
-        throw new NotImplementedException();
-        // var dto = await _mediator.Send(new GetEmployeeByIdQuery(id), ct);
-        // return dto is null ? NotFound() : Ok(dto);
+        var dto = await _mediator.Send(new GetEmployeeByIdQuery(id), ct);
+        return dto is null ? NotFound() : Ok(dto);
     }
 
     [HttpGet]
