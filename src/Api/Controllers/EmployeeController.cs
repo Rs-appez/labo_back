@@ -3,6 +3,7 @@ using ParcBack.Application.Employees.Register;
 using ParcBack.Application.Employees.GetEmployeeById;
 using ParcBack.Application.Employees.ListAllEmployees;
 using ParcBack.Application.Employees.ListEmployeesByChief;
+using ParcBack.Application.Employees.Desactivate;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ParcBack.Application.Employees.Login;
@@ -52,7 +53,7 @@ public class EmployeesController : ControllerBase
         {
             EmployeeDto employee = await _mediator.Send(new LoginQuery(body.Email, body.Password), ct);
             if (employee == null) return Unauthorized("Invalid email or password");
-            var token  =_tokenService.GenerateToken(employee);
+            var token = _tokenService.GenerateToken(employee);
             return Ok(new { Employee = employee, Token = token });
 
         }
@@ -83,23 +84,17 @@ public class EmployeesController : ControllerBase
         var dtos = await _mediator.Send(new ListEmployeesByChiefQuery(_tokenService.GetUserId(User)), ct);
         return Ok(dtos);
     }
-    //
-    // [HttpDelete("{id:int}")]
-    // public async Task<ActionResult<int>> Delete(int id, CancellationToken ct)
-    // {
-    //     try
-    //     {
-    //         var deletedId = await _mediator.Send(new DeleteEmployeeCommand(id), ct);
-    //         return Ok(deletedId);
-    //     }
-    //     catch (InvalidOperationException ex)
-    //     {
-    //         return NotFound(ex.Message);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    //
-    // }
+    [HttpPost("{id:guid}/desactivate")]
+    public async Task<ActionResult> Desactivate(Guid id, CancellationToken ct)
+    {
+        try
+        {
+            await _mediator.Send(new DesactivateEmployeeCommand(id), ct);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
