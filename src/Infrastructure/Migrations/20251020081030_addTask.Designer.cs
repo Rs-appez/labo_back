@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParcBack.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using ParcBack.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251020081030_addTask")]
+    partial class addTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -152,28 +155,6 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("TaskTypes", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Site Maintenance"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Maintenance"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Repair"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Visitor reception"
-                        });
                 });
 
             modelBuilder.Entity("ParcBack.Domain.Entities.Zone", b =>

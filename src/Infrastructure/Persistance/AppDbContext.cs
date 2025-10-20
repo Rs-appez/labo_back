@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Chief> Chiefs => Set<Chief>();
     public DbSet<Role> Roles => Set<Role>();
 
+    public DbSet<EmployeeTask> Tasks => Set<EmployeeTask>();
     public DbSet<TaskType> TaskTypes => Set<TaskType>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -85,6 +86,23 @@ public class AppDbContext : DbContext
             b.HasKey(x => x.Id);
             b.Property(x => x.Name).IsRequired().HasMaxLength(100);
             b.HasIndex(x => x.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<TaskType>().HasData(
+            new TaskType { Id = 1, Name = "Site Maintenance" },
+            new TaskType { Id = 2, Name = "Maintenance" },
+            new TaskType { Id = 3, Name = "Repair" },
+            new TaskType { Id = 4, Name = "Visitor reception" }
+        );
+        modelBuilder.Entity<EmployeeTask>(b =>
+        {
+            b.ToTable("Tasks");
+            b.HasKey(x => x.Id);
+            b.HasOne(x => x.Type)
+             .WithMany()
+             .HasForeignKey("TypeId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
