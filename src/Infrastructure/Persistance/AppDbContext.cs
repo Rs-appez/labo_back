@@ -110,6 +110,11 @@ public class AppDbContext : DbContext
              .OnDelete(DeleteBehavior.Restrict);
             b.Property(x => x.IsCompleted).IsRequired();
             b.Property(x => x.IsValidated).IsRequired();
+            b.HasOne(x => x.EmployeeAssigned)
+             .WithMany(e => e.Tasks)
+             .HasForeignKey("EmployeeId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

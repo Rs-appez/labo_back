@@ -9,6 +9,8 @@ public class EmployeeTask
     public bool IsCompleted { get; set; } = false;
     public bool IsValidated { get; set; } = false;
 
+    public required Employee EmployeeAssigned { get; set; }
+
     public EmployeeTask() { } // Parameterless constructor for EF Core
 
     public override string ToString() => $"Task {{ Id = {Id}, Type = {Type} }}";
