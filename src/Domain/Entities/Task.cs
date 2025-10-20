@@ -12,7 +12,7 @@ public class EmployeeTask
     public bool IsCompleted { get; set; } = false;
     public bool IsValidated { get; set; } = false;
 
-    public required Employee EmployeeAssigned { get; set; }
+    public required Employee? EmployeeAssigned { get; set; }
 
     public EmployeeTask() { } // Parameterless constructor for EF Core
 
