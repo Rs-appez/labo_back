@@ -68,6 +68,11 @@ public class AppDbContext : DbContext
             b.Property(x => x.IsActive).IsRequired();
             b.Property(x => x.CreatedAt).IsRequired();
             b.Property(x => x.LastLoginAt).IsRequired(false);
+            b.HasMany(e => e.Tasks)
+             .WithOne()
+             .HasForeignKey("EmployeeId")
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Chief>(b =>
