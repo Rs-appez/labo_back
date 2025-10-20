@@ -111,6 +111,8 @@ public class AppDbContext : DbContext
              .OnDelete(DeleteBehavior.Restrict);
             b.Property(x => x.IsCompleted).IsRequired();
             b.Property(x => x.IsValidated).IsRequired();
+            b.Property(x => x.StartTime).IsRequired();
+            b.Property(x => x.EndTime).IsRequired();
             b.HasOne(x => x.EmployeeAssigned)
              .WithMany(e => e.Tasks)
              .HasForeignKey("EmployeeId")

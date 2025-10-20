@@ -6,6 +6,9 @@ public class EmployeeTask
 
     public required TaskType Type { get; set; }
 
+    public required DateTime StartTime { get; set; }
+    public required DateTime EndTime { get; set; }
+
     public bool IsCompleted { get; set; } = false;
     public bool IsValidated { get; set; } = false;
 
