@@ -32,6 +32,9 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, int>
         if (employee is null)
             throw new InvalidOperationException($"Employee with id {command.EmployeeId} does not exist");
 
+        if (!employee.IsActive)
+            throw new InvalidOperationException($"Cannot assign task to inactive employee ");
+
         var item = new EmployeeTask()
         {
             Type = Type,
