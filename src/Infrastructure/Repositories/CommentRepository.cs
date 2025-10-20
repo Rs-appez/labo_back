@@ -15,7 +15,11 @@ public class CommentRepository : ICommentRepository
         => await _db.Comments.Include(c => c.Employee).Include(c => c.Task).FirstOrDefaultAsync(t => t.Id == id, ct);
 
     public async Task<IReadOnlyList<Comment?>> GetByTaskIdAsync(int taskId, CancellationToken ct = default)
-        => await _db.Comments.Include(c => c.Employee).Include(c => c.Task).Where(c => c.Task.Id == taskId).OrderByDescending(c => c.CreatedAt).ToListAsync(ct);
+        => await _db.Comments.Include(c => c.Employee)
+                             .Include(c => c.Task)
+                             .Where(c => c.Task.Id == taskId)
+                             .OrderByDescending(c => c.CreatedAt)
+                             .ToListAsync(ct);
 
     public async Task<IReadOnlyList<Comment>> ListAsync(CancellationToken ct = default)
         => await _db.Comments.Include(c => c.Employee).Include(c => c.Task).AsNoTracking().ToListAsync(ct);
