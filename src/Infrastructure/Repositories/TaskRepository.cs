@@ -12,7 +12,7 @@ public class TaskRepository : ITaskRepository
     public TaskRepository(AppDbContext db) => _db = db;
 
     public async Task<EmployeeTask?> GetByIdAsync(int id, CancellationToken ct = default)
-        => await _db.Tasks.FirstOrDefaultAsync(t => t.Id == id, ct);
+        => await _db.Tasks.Include(t => t.Type).FirstOrDefaultAsync(t => t.Id == id, ct);
 
     public async Task<IReadOnlyList<EmployeeTask>> ListAsync(CancellationToken ct = default)
         => await _db.Tasks.AsNoTracking().ToListAsync(ct);
